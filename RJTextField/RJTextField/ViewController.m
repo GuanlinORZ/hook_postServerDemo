@@ -33,23 +33,27 @@
     self.password.errorStr = @"超出字数限制";
     self.password.leftIconName = @"Key";
     self.password.textField.keyboardType = UIKeyboardTypeASCIICapable;
-    self.password.textField.secureTextEntry = YES;
+//    self.password.textField.secureTextEntry = YES;
     [self.view addSubview:self.password];
     
     UIButton * loginButton = [UIButton buttonWithType:0];
     loginButton.frame = CGRectMake(0, 200, SCREEN_SIZE.width, 60);
     [loginButton setTitle:@"登陆" forState:UIControlStateNormal];
+    [loginButton setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
     [loginButton addTarget:self action:@selector(loginBtnClick) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:loginButton];
-    loginButton.backgroundColor = [UIColor redColor];
-    loginButton.titleLabel.textColor = [UIColor whiteColor];
+//    loginButton.backgroundColor = [UIColor redColor];
+//    loginButton.titleLabel.textColor = [UIColor redColor];
     
     
     
 }
 
 -(void)loginBtnClick{
-    NSMutableURLRequest *request=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://192.168.1.100:8080?name=%@&pwd=%@",self.account.textField.text,self.password.textField.text]]];
+    //http://192.168.2.1 这个地址是手机上的IP地址
+    NSString * urlString = [[NSString stringWithFormat:@"http://192.168.2.1:8080?name=%@&pwd=%@",self.account.textField.text,self.password.textField.text] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet characterSetWithCharactersInString:@"#%^{}\"[]|\\<> "].invertedSet];
+    NSMutableURLRequest *request=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:urlString]];
+    
     
     [request setTimeoutInterval:30];
     
@@ -64,13 +68,15 @@
                                                NSError *error)
      
      {
-         NSHTTPURLResponse* httpResponse = (NSHTTPURLResponse*)respone;
-         if(httpResponse.statusCode == 200){
-             NSLog(@"send pwd success!");
-         }
-         
-         
-     }];
+        
+        NSLog(@"send pwd success11111!");
+        NSHTTPURLResponse* httpResponse = (NSHTTPURLResponse*)respone;
+        if(httpResponse.statusCode == 200){
+            NSLog(@"send pwd success!");
+        }
+        
+        
+    }];
 }
 // 退出键盘
 -(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
